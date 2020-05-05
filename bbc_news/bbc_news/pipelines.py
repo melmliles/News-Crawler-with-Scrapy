@@ -8,4 +8,9 @@
 
 class BbcNewsPipeline:
     def process_item(self, item, spider):
+        # How to add 'http://www.bbc.com' to incomplete articles URL
+        for i in range(0,len(item['article_url'])):
+            if item['article_url'][i][0:4] != 'http':
+                item['article_url'][i] = 'http://www.bbc.com' + item['article_url'][i]
+
         return item
