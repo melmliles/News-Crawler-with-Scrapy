@@ -16,8 +16,11 @@ class BbcArticlesSpider(scrapy.Spider):
 
             # Get the headline
             loader.add_xpath('headline', './/a[@class="media__link"]/text()')            
-            # Get the summary
-            loader.add_xpath('summary', './/p[@class="media__summary"]/text()')
+            # Get the summary, and fill in empty one wit 'NA' 
+            if loader.get_xpath('.//p[@class="media__summary"]'):
+                loader.add_xpath('summary', './/p[@class="media__summary"]/text()')
+            else:
+                loader.add_value('summary', 'NA')
             # Get the article URL    
             loader.add_xpath('article_url', './/a[@class="media__link"]/@href')
 
