@@ -7,9 +7,18 @@
 
 import scrapy
 from scrapy.item import Item, Field
+from scrapy.loader.processors import MapCompose
 
+def remove_spaces(text):
+    # strip white spaces
+    text = text.strip()
+    return text
 
 class BbcNewsItem(scrapy.Item):
-    headline = Field()
-    summary = Field()
+    headline = Field(
+        input_processor=MapCompose(remove_spaces)
+        )
+    summary = Field(
+        input_processor=MapCompose(remove_spaces)
+        )
     article_url = Field()
