@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_pymongo import PyMongo
 
 
@@ -24,6 +24,23 @@ def get_data():
         data += 'Headline:    ' + str(r['headline']).strip('[]"') + '<br>' \
                'Summary:    ' + str(r['summary']).strip('[]"') + '<br>' \
                'URL:  <a href ='+str(r['article_url']).strip('[]"')+'>click here</a> <br><br>'   
+    return data
+
+
+@app.route('/search_keyword', methods=['POST'])
+def get_keyword():
+    articles = mongo.db.bbc_articles
+    res = articles.find()
+
+    data = ''
+    key = request.form.get('keyword')
+    for r in res:
+        if (str(r['headline']).find(key)>=0) or (str(r['summary']).find(key) >=0):
+            data += 'Headline:    ' + str(r['headline']).strip('[]"') + '<br>' \
+                   'Summary:    ' + str(r['summary']).strip('[]"') + '<br>' \
+                   'URL:  <a href ='+str(r['article_url']).strip('[]"')+'>click here</a> <br><br>'
+    if not data:
+        data = '<h1>Keyword Not Found</h1>'
     return data
             
 
